@@ -34,7 +34,20 @@ namespace Countries.Api.Controllers
             return countries;
         }
 
-        [Route("populate")]
+        [HttpGet("{id}")]
+        public ActionResult<CountryApiViewModel> GetCountry(int id)
+        {
+            var country = this.countriesService.GetCountry<CountryApiViewModel>(id);
+
+            if (country == null)
+            {
+                return this.NotFound();
+            }
+
+            return country;
+        }
+
+        [HttpGet("populate")]
         public async Task<ActionResult> PopulateDatabase()
         {
             if (this.context.Countries.Any() == false)
@@ -245,7 +258,6 @@ namespace Countries.Api.Controllers
                         }
                     }
 
-
                     this.context.Countries.Add(country);
                     this.context.SaveChanges();
                 }
@@ -253,7 +265,7 @@ namespace Countries.Api.Controllers
                 return this.Ok($"Successfully populated table with {this.context.Countries.Count()} countries.");
             }
 
-            return this.Ok("Database is already populated with");
+            return this.Ok("Database is already populated.");
         }
     }
 }

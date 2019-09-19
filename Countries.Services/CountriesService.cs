@@ -27,5 +27,14 @@ namespace Countries.Services
 
             return countries;
         }
+
+        public T GetCountry<T>(int id)
+        {
+            var country = this.context.Countries
+                .Find(id);
+
+            var mappedCountry = this.mapper.Map<T>(country);
+            return mappedCountry;
+        }
     }
 }
